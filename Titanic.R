@@ -1,8 +1,10 @@
+#Importing library
 library(randomForest)
 
 data<-train
 valid<-test
 
+#data preprocessing
 data$Sex[data$Sex == "female"] <- 0
 data$Sex[data$Sex == "male"] <- 1
 data$Sex <- as.integer(data$Sex)
@@ -24,9 +26,11 @@ data$Age[is.na(data$Age)] <- mean(data$Age , na.rm = TRUE)
 
 data$Embarked[is.na(data$Embarked)] <- 1
 
+#Training random forest model on data
 rf <- randomForest(as.factor(Survived) ~ Pclass+Sex+Age+Fare+Embarked+Child+famsize , data=data,importance=TRUE,proximity=TRUE, ntree=20000)
 round(importance(rf), 2)
 ##################################################
+#processing test data
 test$Sex[test$Sex == "female"] <- 0
 test$Sex[test$Sex == "male"] <- 1
 test$Sex <- as.integer(test$Sex)
