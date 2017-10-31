@@ -1,10 +1,11 @@
 #Importing library
 library(randomForest)
 
+#Loading data
 data<-train
 valid<-test
 
-#data preprocessing
+#data pre-processing
 data$Sex[data$Sex == "female"] <- 0
 data$Sex[data$Sex == "male"] <- 1
 data$Sex <- as.integer(data$Sex)
@@ -30,7 +31,7 @@ data$Embarked[is.na(data$Embarked)] <- 1
 rf <- randomForest(as.factor(Survived) ~ Pclass+Sex+Age+Fare+Embarked+Child+famsize , data=data,importance=TRUE,proximity=TRUE, ntree=20000)
 round(importance(rf), 2)
 ##################################################
-#processing test data
+#pre-processing test data
 test$Sex[test$Sex == "female"] <- 0
 test$Sex[test$Sex == "male"] <- 1
 test$Sex <- as.integer(test$Sex)
@@ -52,6 +53,7 @@ test$Age[is.na(test$Age)] <- mean(test$Age , na.rm = TRUE)
 
 data$Embarked[is.na(test$Embarked)] <- 1
 
+#Predicting solution
 pred <- predict(rf , test)
 titan <- data.frame(PassengerId= test$PassengerId)
 titan$Survived <- pred
